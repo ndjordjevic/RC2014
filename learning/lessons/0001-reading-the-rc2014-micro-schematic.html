@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 01 — Reading the RC2014 Micro Schematic</title>
+<style>
+  :root{ --ink:#1a1a1a; --muted:#6b6b6b; --rule:#d8d2c4; --accent:#7a1f1f; --bg:#fbfaf7; --tag:#ece5d6;
+         --ok:#1f6b34; --no:#9b2226; }
+  *{box-sizing:border-box}
+  body{font-family:Georgia,"Iowan Old Style",serif;color:var(--ink);background:var(--bg);
+       max-width:44rem;margin:3rem auto;padding:0 1.4rem;line-height:1.62;font-size:18px}
+  .kicker{font-family:-apple-system,system-ui,sans-serif;font-size:.72rem;letter-spacing:.18em;
+          text-transform:uppercase;color:var(--accent);margin:0 0 .3rem}
+  h1{font-size:2rem;margin:0 0 .3rem;letter-spacing:-.015em;line-height:1.1}
+  .sub{color:var(--muted);font-style:italic;margin:0 0 1.8rem}
+  h2{font-size:1.25rem;margin:2.4rem 0 .5rem;letter-spacing:-.01em}
+  h2 .n{color:var(--accent);font-variant:small-caps;margin-right:.4rem}
+  figure{margin:1.6rem 0;}
+  figure img{width:100%;border:1px solid var(--rule);border-radius:5px;background:#fff}
+  figcaption{font-family:-apple-system,system-ui,sans-serif;font-size:.78rem;color:var(--muted);margin-top:.4rem;text-align:center}
+  code{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:.82em;background:var(--tag);padding:.05em .35em;border-radius:3px}
+  .ovl{text-decoration:overline}
+  ul{padding-left:1.2rem} li{margin:.3rem 0}
+  .key{font-family:-apple-system,system-ui,sans-serif;font-size:.95rem;background:#fff;border:1px solid var(--rule);
+       border-left:3px solid var(--accent);border-radius:4px;padding:.7rem .9rem;margin:.7rem 0}
+  .key b{color:var(--accent)}
+  .blocks{font-family:-apple-system,system-ui,sans-serif;font-size:.9rem;width:100%;border-collapse:collapse;margin:.5rem 0}
+  .blocks td{border-bottom:1px solid var(--rule);padding:.4rem .5rem;vertical-align:top}
+  .blocks td:first-child{font-weight:bold;white-space:nowrap;color:var(--accent)}
+  .callout{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:1rem 1.1rem;margin:1.4rem 0}
+  .callout h3{margin:.1rem 0 .5rem;font-size:1rem;font-family:-apple-system,system-ui,sans-serif}
+  /* quiz */
+  .quiz{font-family:-apple-system,system-ui,sans-serif}
+  .q{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:1rem 1.1rem;margin:1rem 0}
+  .q p{margin:0 0 .6rem;font-weight:600;font-size:.98rem}
+  .opt{display:block;width:100%;text-align:left;font:inherit;font-size:.9rem;background:var(--bg);
+       border:1px solid var(--rule);border-radius:5px;padding:.5rem .7rem;margin:.35rem 0;cursor:pointer;transition:.12s}
+  .opt:hover{border-color:var(--accent)}
+  .opt.correct{background:#e9f4ec;border-color:var(--ok);color:var(--ok);font-weight:600}
+  .opt.wrong{background:#fbecec;border-color:var(--no);color:var(--no)}
+  .fb{font-size:.82rem;margin-top:.5rem;min-height:1.1em}
+  .fb.correct{color:var(--ok)} .fb.wrong{color:var(--no)}
+  #score{font-family:-apple-system,system-ui,sans-serif;font-weight:700;margin-top:1rem;font-size:1.05rem}
+  .nav{font-size:.82rem;color:var(--muted);margin-top:2.6rem;border-top:1px solid var(--rule);padding-top:.9rem;font-family:-apple-system,system-ui,sans-serif}
+  a{color:var(--accent)}
+  @media print{body{background:#fff;margin:0;max-width:none} .opt{cursor:default}}
+</style>
+</head>
+<body>
+
+<p class="kicker">RC2014 Micro · Lesson 01 · Phase 1</p>
+<h1>Reading the RC2014 Micro schematic</h1>
+<p class="sub">The win: by the end you can point at <em>any</em> symbol on this one-page drawing and say what it is and which block it belongs to. That's the foundation for everything else in the mission.</p>
+
+<p>This is the entire RC2014 Micro on one A4 sheet (Rev 1.1, March 2019, drawn in KiCad). It looks busy, but it's just <strong>nine functional blocks</strong> wired together by three buses. Once you have the reading vocabulary, the busyness disappears.</p>
+
+<figure>
+  <img src="../assets/RC2014-Micro-schematic.png" alt="RC2014 Micro schematic, Rev 1.1">
+  <figcaption>RC2014 Micro schematic, Rev 1.1 — your primary source (<a href="../assets/RC2014-Micro-schematic.pdf">open the PDF</a> to zoom in)</figcaption>
+</figure>
+
+<h2><span class="n">1.</span> Five keys to reading it</h2>
+<p>Every schematic uses the same handful of conventions. Learn these five and you can read any of them — start with this board.</p>
+
+<div class="key"><b>① Reference designators.</b> Each part has a letter+number label. <code>U</code>=chip, <code>R</code>=resistor, <code>C</code>=capacitor, <code>Y</code>=crystal, <code>SW</code>=switch, <code>S</code>=jumper, <code>Con</code>=connector. So <code>U4</code>, <code>R7</code>, <code>C8</code>, <code>Y1</code> each name one physical part. The <em>part number</em> printed nearby (e.g. <code>27C512</code>) tells you the <em>type</em>.</div>
+
+<div class="key"><b>② Net labels are connections.</b> A wire tagged <code>CLK</code> over by the crystal and another tagged <code>CLK</code> over at the CPU are the <em>same wire</em> — even though no line is drawn between them. This is how the sheet stays readable. Look for <code>RESET</code>, <code>CLK</code>, <code>M1</code>, <code><span class="ovl">RD</span></code>, <code><span class="ovl">WR</span></code>, <code><span class="ovl">MREQ</span></code>, <code><span class="ovl">IORQ</span></code> hopping around the page.</div>
+
+<div class="key"><b>③ Buses.</b> The thick lines are buses — bundles of related nets. Find the <em>Address Bus</em> (<code>A0–A15</code>, top) and the <em>Data Bus</em> (<code>D0–D7</code>, bottom). Almost every chip taps both.</div>
+
+<div class="key"><b>④ Power symbols.</b> <code>VCC</code> is +5 V, <code>GND</code> is 0 V. They're scattered everywhere; all <code>VCC</code> tags are one net, all <code>GND</code> tags another.</div>
+
+<div class="key"><b>⑤ The overbar = active-low.</b> A bar over a name (<code><span class="ovl">RD</span></code>, <code><span class="ovl">CE</span></code>, <code><span class="ovl">WE</span></code>) means the signal does its job when pulled <strong>low</strong> (0 V), not high. Most control and chip-select lines on this board are active-low.</div>
+
+<h2><span class="n">2.</span> The nine blocks</h2>
+<p>Now overlay structure on the drawing. Every part on the sheet lives in exactly one of these:</p>
+
+<table class="blocks">
+<tr><td>CPU</td><td><code>U4</code> Z80 — top-left. Drives the address bus, trades bytes on the data bus, emits control signals.</td></tr>
+<tr><td>Clock</td><td><code>Y1</code> 7.3728&nbsp;MHz crystal + two <code>U5</code> inverters (U5E/U5F) + <code>R6</code>, <code>R7</code>, <code>C7</code>, <code>C8</code> — bottom-left. Makes <code>CLK</code>.</td></tr>
+<tr><td>Reset</td><td><code>SW1</code> push-button + <code>R1</code> — top-left. Pulls <code>RESET</code> to restart the CPU at 0x0000.</td></tr>
+<tr><td>RAM</td><td><code>U3</code> HM62256, 32K×8 static RAM — centre. Read/write memory; uses <code>A0–A14</code>.</td></tr>
+<tr><td>ROM</td><td><code>U6</code> 27C512, 64K×8 EPROM — centre. Holds firmware (BASIC / Small Computer Monitor).</td></tr>
+<tr><td>Decode</td><td>OR gates <code>U1</code>/<code>U10</code> (74LS32) + inverters in <code>U5</code> (74HCT04) — centre-right. Decide <em>who</em> is selected and whether it's a read or write (<code><span class="ovl">CS</span></code>, <code><span class="ovl">CE</span></code>, <code><span class="ovl">RD</span></code>, <code><span class="ovl">WR</span></code>).</td></tr>
+<tr><td>ROM bank</td><td>Jumpers <code>JP2</code>/<code>JP3</code>/<code>JP4</code> (marked "ROM Bank Selection"; select nets <code>S1</code>/<code>S2</code>/<code>S3</code>) — drive ROM <code>A13/A14/A15</code> to pick which 8K page of the 64K EPROM runs.</td></tr>
+<tr><td>Serial</td><td><code>U2</code> MC68B50 ACIA + 6-pin FTDI header <code>P1</code> + <code>R3</code>/<code>R4</code> — right. The console, 115200&nbsp;8-N-1.</td></tr>
+<tr><td>Bus</td><td><code>Con1</code> 40-pin RC2014 bus — bottom. Brings the address/data/control lines + 5V/GND/RX/TX out to a backplane.</td></tr>
+</table>
+<p>(Plus the supply: decoupling caps <code>C1–C5</code> across <code>VCC</code>/<code>GND</code>, bottom-right.) Full table: <a href="../reference/rc2014-micro-component-inventory.html">Component Inventory</a>.</p>
+
+<div class="callout">
+  <h3>The one idea that ties it together</h3>
+  <p>The Z80 puts a 16-bit <em>address</em> on <code>A0–A15</code> and says "memory or I/O?" (<code><span class="ovl">MREQ</span></code> vs <code><span class="ovl">IORQ</span></code>) and "read or write?" (<code><span class="ovl">RD</span></code> vs <code><span class="ovl">WR</span></code>). The <strong>decode block</strong> turns that into a single chip-select so exactly one of RAM, ROM, or the serial chip answers on <code>D0–D7</code>. Hold onto this — Lessons 04–05 trace it gate by gate.</p>
+</div>
+
+<h2><span class="n">3.</span> Check yourself</h2>
+<p class="quiz">Recall beats recognition. Answer from memory, then click — feedback is instant.</p>
+
+<div class="quiz" id="quiz">
+  <div class="q" data-a="0">
+    <p>1. On the schematic, <code>U4</code> is the —</p>
+    <button class="opt">Z80 processor</button>
+    <button class="opt">serial controller</button>
+    <button class="opt">main memory</button>
+    <button class="opt">firmware storage</button>
+    <div class="fb"></div>
+  </div>
+  <div class="q" data-a="1">
+    <p>2. Which reference designator is the 32K RAM?</p>
+    <button class="opt">U6</button>
+    <button class="opt">U3</button>
+    <button class="opt">U2</button>
+    <button class="opt">U1</button>
+    <div class="fb"></div>
+  </div>
+  <div class="q" data-a="2">
+    <p>3. Two wires both labelled <code>CLK</code>, far apart on the sheet, are —</p>
+    <button class="opt">two separate nets</button>
+    <button class="opt">never actually connected</button>
+    <button class="opt">the same net</button>
+    <button class="opt">only power symbols</button>
+    <div class="fb"></div>
+  </div>
+  <div class="q" data-a="3">
+    <p>4. An overbar over <code>RD</code> means it is asserted when the line is —</p>
+    <button class="opt">high</button>
+    <button class="opt">floating</button>
+    <button class="opt">removed</button>
+    <button class="opt">low</button>
+    <div class="fb"></div>
+  </div>
+  <div class="q" data-a="2">
+    <p>5. The "ROM Bank Selection" jumpers (<code>JP2</code>–<code>JP4</code>) select —</p>
+    <button class="opt">the clock speed</button>
+    <button class="opt">the serial baud</button>
+    <button class="opt">a ROM bank</button>
+    <button class="opt">the reset line</button>
+    <div class="fb"></div>
+  </div>
+  <div class="q" data-a="0">
+    <p>6. The MC68B50 (<code>U2</code>) gives the Micro its —</p>
+    <button class="opt">serial console</button>
+    <button class="opt">extra memory</button>
+    <button class="opt">clock signal</button>
+    <button class="opt">reset button</button>
+    <div class="fb"></div>
+  </div>
+  <p id="score"></p>
+</div>
+
+<div class="callout">
+  <h3>Read this next (primary source)</h3>
+  <p>Open the <a href="../assets/RC2014-Micro-schematic.pdf"><b>RC2014 Micro schematic PDF</b></a> and spend five minutes finding each of the nine blocks on it by eye. Then skim <a href="http://searle.x10host.com/z80/SimpleZ80.html">Grant Searle's Simple Z80</a> — the minimal design the Micro descends from — to see the same idea with even fewer chips.</p>
+</div>
+
+<p><strong>Stuck on any symbol?</strong> I'm your teacher for this — ask me about any specific part, pin, or net on the schematic and we'll zoom in. When you can name the nine blocks and most designators from memory, say so and we'll start <em>Lesson 02 — the clock block</em>.</p>
+
+<p class="nav">RC2014 Micro · Lesson 01 ·
+  <a href="../reference/GLOSSARY.html">Glossary</a> ·
+  <a href="../reference/rc2014-micro-component-inventory.html">Component Inventory</a> ·
+  <a href="../roadmap.md">Roadmap</a> ·
+  <a href="../MISSION.md">Mission</a></p>
+
+<script>
+(function(){
+  var total = document.querySelectorAll('#quiz .q').length, answered = {}, correct = 0;
+  document.querySelectorAll('#quiz .q').forEach(function(q, qi){
+    var ans = +q.dataset.a, opts = q.querySelectorAll('.opt'), fb = q.querySelector('.fb');
+    opts.forEach(function(opt, i){
+      opt.addEventListener('click', function(){
+        if(answered[qi]) return;
+        answered[qi] = true;
+        if(i === ans){ opt.classList.add('correct'); fb.textContent='Correct.'; fb.className='fb correct'; correct++; }
+        else { opt.classList.add('wrong'); opts[ans].classList.add('correct');
+               fb.textContent='Not quite — the highlighted answer is right.'; fb.className='fb wrong'; }
+        if(Object.keys(answered).length === total){
+          document.getElementById('score').textContent = 'Score: ' + correct + ' / ' + total +
+            (correct===total ? ' — you can read the board. Ready for Lesson 02.' : ' — review the keys above, then retry.');
+        }
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

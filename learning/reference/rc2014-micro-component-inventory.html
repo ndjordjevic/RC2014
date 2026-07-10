@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RC2014 Micro — Component Inventory</title>
+<style>
+  :root{ --ink:#1a1a1a; --muted:#6b6b6b; --rule:#d8d2c4; --accent:#7a1f1f; --bg:#fbfaf7; --tag:#ece5d6; }
+  *{box-sizing:border-box}
+  body{font-family:Georgia,"Iowan Old Style",serif;color:var(--ink);background:var(--bg);
+       max-width:52rem;margin:3rem auto;padding:0 1.4rem;line-height:1.5;font-size:17px}
+  h1{font-size:1.8rem;margin:0 0 .2rem}
+  .sub{color:var(--muted);font-style:italic;margin:0 0 1.4rem}
+  h2{font-size:1.05rem;margin:2rem 0 .5rem;color:var(--accent);font-variant:small-caps;letter-spacing:.03em;
+     border-bottom:1px solid var(--rule);padding-bottom:.2rem}
+  table{border-collapse:collapse;width:100%;font-family:-apple-system,system-ui,sans-serif;font-size:.84rem;margin:.4rem 0 1rem}
+  th,td{text-align:left;padding:.4rem .5rem;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{background:var(--tag);font-variant:small-caps;letter-spacing:.03em}
+  code{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:.85em}
+  .desig{font-weight:bold;white-space:nowrap}
+  .note{font-size:.82rem;color:var(--muted);font-style:italic}
+  .nav{font-size:.82rem;color:var(--muted);margin-top:2.5rem;border-top:1px solid var(--rule);padding-top:.8rem}
+  a{color:var(--accent)}
+  @media print{body{background:#fff;margin:0;max-width:none}}
+</style>
+</head>
+<body>
+<h1>RC2014 Micro — Component Inventory</h1>
+<p class="sub">Every part on the schematic (Rev 1.1, March 2019), grounded in <code>assets/RC2014-Micro-schematic.pdf</code>. Quick-reference companion to Lesson 01.</p>
+
+<h2>Integrated circuits (U)</h2>
+<table>
+<tr><th>Ref</th><th>Part</th><th>What it is</th><th>Block</th></tr>
+<tr><td class="desig">U4</td><td>Z80 CPU</td><td>8-bit processor — the brain; drives address bus, moves data, emits control signals</td><td>CPU</td></tr>
+<tr><td class="desig">U3</td><td>HM62256 (62256)</td><td>32K×8 static RAM — read/write memory</td><td>Memory</td></tr>
+<tr><td class="desig">U6</td><td>27C512</td><td>64K×8 EPROM — firmware ROM; A13–A15 select an 8K bank</td><td>Memory / ROM bank</td></tr>
+<tr><td class="desig">U2</td><td>MC68B50</td><td>ACIA serial UART — the console serial port</td><td>Serial I/O</td></tr>
+<tr><td class="desig">U1</td><td>74LS32 (quad OR)</td><td>Glue logic — OR gates U1A/U1B/U1C combine <code><span style="text-decoration:overline">RD</span></code>/<code><span style="text-decoration:overline">WR</span></code>/<code><span style="text-decoration:overline">MREQ</span></code> and the high address lines (exact wiring traced in the decode lesson)</td><td>Address decode</td></tr>
+<tr><td class="desig">U10</td><td>74LS32 (OR)</td><td>Glue logic — part of the ROM/RAM chip-select decode (traced in the decode lesson)</td><td>Address decode</td></tr>
+<tr><td class="desig">U5</td><td>74HCT04 (hex inverter)</td><td>Six inverters: U5E+U5F = clock oscillator; U5B → <code><span style="text-decoration:overline">IORQ</span></code>; U5A/U5C/U5D used/spare in address decode (exact roles traced in the decode lesson)</td><td>Clock + decode</td></tr>
+</table>
+<p class="note">Variant: on the <strong>RC2014 Micro+</strong>, U6 is a <strong>39SF010</strong> (128K flash) rather than the 27C512 — everything else here is common.</p>
+
+<h2>Timing & reset</h2>
+<table>
+<tr><th>Ref</th><th>Part</th><th>What it is</th><th>Block</th></tr>
+<tr><td class="desig">Y1</td><td>Crystal (7.3728 MHz)</td><td>Quartz reference for the clock oscillator. <em>Value is the standard RC2014 part per the BOM — not printed on the schematic.</em></td><td>Clock</td></tr>
+<tr><td class="desig">C7, C8</td><td>Capacitors</td><td>Crystal load capacitors</td><td>Clock</td></tr>
+<tr><td class="desig">R6</td><td>Resistor</td><td>Feedback resistor across the oscillator inverter U5E (input pin 11 ↔ output pin 10)</td><td>Clock</td></tr>
+<tr><td class="desig">R7</td><td>Resistor</td><td>Series resistor between the oscillator node and the crystal</td><td>Clock</td></tr>
+<tr><td class="desig">SW1</td><td>Push switch (SW_PUSH)</td><td>Reset button → pulls <code>RESET</code></td><td>Reset</td></tr>
+<tr><td class="desig">R1</td><td>Resistor</td><td>Reset network resistor (with SW1)</td><td>Reset</td></tr>
+<tr><td class="desig">R5</td><td>Resistor</td><td>Pull-up on the Z80 <code>INT</code>/<code>NMI</code> interrupt line(s)</td><td>Control</td></tr>
+</table>
+
+<h2>Serial header & jumpers</h2>
+<table>
+<tr><th>Ref</th><th>Part</th><th>What it is</th><th>Block</th></tr>
+<tr><td class="desig">P1</td><td>6-pin header (CONN_01x06)</td><td>FTDI serial connector — RX, TX, GND, +5 V, with <code>CLK</code> available (console at 115200 8-N-1)</td><td>Serial I/O</td></tr>
+<tr><td class="desig">R3, R4</td><td>Resistors</td><td>Series resistors on the RX/TX serial lines (plus two unlabelled series <code>R</code> at the header)</td><td>Serial I/O</td></tr>
+<tr><td class="desig">JP1</td><td>Jumper (2-pin)</td><td>Option jumper at the serial header</td><td>Serial I/O</td></tr>
+<tr><td class="desig">JP2, JP3, JP4</td><td>3-pin jumpers (JUMPER3, "ROM Bank Selection")</td><td>Tie ROM A13/A14/A15 high or low → choose which 8K page of the 64K EPROM runs. Their select nets are labelled <code>S1</code>/<code>S2</code>/<code>S3</code> on the sheet.</td><td>ROM bank select</td></tr>
+</table>
+
+<h2>Power & connector</h2>
+<table>
+<tr><th>Ref</th><th>Part</th><th>What it is</th><th>Block</th></tr>
+<tr><td class="desig">C1–C5</td><td>Capacitors</td><td>Decoupling caps across VCC–GND (one per chip region)</td><td>Power</td></tr>
+<tr><td class="desig">Con1</td><td>40-pin header (ZB0_BUS)</td><td>The RC2014 bus: A0–A15, D0–D7, control (RESET, CLK, M1, RD, WR, MREQ, IORQ, INT), 5V/GND, RX/TX, 4 spares → backplane expansion</td><td>RC2014 bus</td></tr>
+<tr><td class="desig">VCC / GND</td><td>Power nets</td><td>+5 V and 0 V supply rails (appear as tags across the whole sheet)</td><td>Power</td></tr>
+</table>
+
+<p class="note">Exact pin-level decode (RAM <code><span style="text-decoration:overline">CS</span></code> boolean, ROM <code><span style="text-decoration:overline">CE</span></code>, ACIA port select) is traced from the schematic + datasheets in the memory/serial lessons — not asserted here.</p>
+
+<p class="nav">RC2014 Micro teaching workspace · see <a href="GLOSSARY.html">Glossary</a> · <a href="../lessons/0001-reading-the-rc2014-micro-schematic.html">Lesson 01</a> · <a href="../MISSION.md">Mission</a></p>
+</body>
+</html>

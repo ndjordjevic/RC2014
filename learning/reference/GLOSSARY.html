@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RC2014 Micro — Glossary</title>
+<style>
+  :root{ --ink:#1a1a1a; --muted:#6b6b6b; --rule:#d8d2c4; --accent:#7a1f1f; --bg:#fbfaf7; --tag:#ece5d6; }
+  *{box-sizing:border-box}
+  body{font-family:Georgia,"Iowan Old Style",serif;color:var(--ink);background:var(--bg);
+       max-width:46rem;margin:3rem auto;padding:0 1.4rem;line-height:1.55;font-size:18px}
+  h1{font-size:1.9rem;margin:0 0 .2rem;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-style:italic;margin:0 0 1.6rem}
+  h2{font-size:1.15rem;margin:2.1rem 0 .6rem;color:var(--accent);
+     border-bottom:1px solid var(--rule);padding-bottom:.25rem;font-variant:small-caps;letter-spacing:.03em}
+  dt{font-weight:bold;margin-top:1rem}
+  dd{margin:.15rem 0 0;}
+  dd .avoid{color:var(--muted);font-size:.85em;font-style:italic}
+  code{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:.82em;background:var(--tag);
+       padding:.05em .35em;border-radius:3px}
+  .ovl{ text-decoration:overline }
+  .nav{font-size:.82rem;color:var(--muted);margin-top:2.5rem;border-top:1px solid var(--rule);padding-top:.8rem}
+  a{color:var(--accent)}
+  @media print{body{background:#fff;margin:0;max-width:none}}
+</style>
+</head>
+<body>
+<h1>RC2014 Micro — Glossary</h1>
+<p class="sub">Canonical vocabulary for reading the RC2014 Micro schematic (Rev 1.1, 2019). Introduced in Lesson 01.</p>
+
+<h2>Reading a schematic</h2>
+<dl>
+  <dt>Reference designator</dt>
+  <dd>The letter+number label that names a part on the board: <code>U</code>=integrated circuit, <code>R</code>=resistor, <code>C</code>=capacitor, <code>Y</code>=crystal, <code>SW</code>=switch, <code>S</code>/<code>JP</code>=jumper, <code>Con</code>/<code>J</code>=connector. E.g. <code>U4</code> is the Z80.
+  <br><span class="avoid"><em>Avoid</em>: "part number" (that's the chip type, e.g. 27C512)</span></dd>
+
+  <dt>Net</dt>
+  <dd>One electrical connection — a wire and everything tied to it. Two pins on the same net are the same node.</dd>
+
+  <dt>Net label / off-page connector</dt>
+  <dd>A named tag on a wire (e.g. <code>CLK</code>, <code>RESET</code>, <code>MREQ</code>). Every wire with the same label is the <em>same net</em> even with no line drawn between them — this is how a dense schematic avoids spaghetti.
+  <br><span class="avoid"><em>Avoid</em>: "signal name" used loosely — here a label literally <em>is</em> the connection</span></dd>
+
+  <dt>Bus</dt>
+  <dd>A group of related nets carrying one logical thing, drawn as a thick line. The Micro has three: the <strong>address bus</strong> (<code>A0–A15</code>), the <strong>data bus</strong> (<code>D0–D7</code>), and the <strong>control bus</strong> (RD, WR, MREQ, …).</dd>
+
+  <dt>Power symbol</dt>
+  <dd>The supply tags: <code>VCC</code> (+5 V) and <code>GND</code> (0 V). They appear all over the sheet; every <code>VCC</code> tag is the same +5 V net.</dd>
+
+  <dt>Active-low (overbar)</dt>
+  <dd>A signal that is "true / asserted" when it is at <strong>0 V (low)</strong>, shown with a bar over the name (e.g. <span class="ovl">RD</span>, <span class="ovl">CE</span>, <span class="ovl">WE</span>). Written in text as <code>/RD</code> or <code>RD#</code>.
+  <br><span class="avoid"><em>Avoid</em>: assuming high = active</span></dd>
+</dl>
+
+<h2>The chips & parts (this board)</h2>
+<dl>
+  <dt>Z80 (CPU)</dt><dd>The 8-bit processor (<code>U4</code>); drives the address bus, exchanges bytes on the data bus, and emits control signals. 40-pin.</dd>
+  <dt>SRAM</dt><dd>Static RAM — read/write memory that holds data while powered, no refresh needed. The Micro's RAM is the <strong>HM62256</strong> (<code>U3</code>), 32K×8.</dd>
+  <dt>EPROM</dt><dd>Erasable programmable ROM — non-volatile memory holding firmware. The Micro's ROM is the <strong>27C512</strong> (<code>U6</code>), 64K×8. <span class="avoid"><em>Variant</em>: the Micro+ uses a 39SF010 (128K) flash instead.</span></dd>
+  <dt>ACIA</dt><dd>Asynchronous Communications Interface Adapter — a serial UART chip. The Micro uses the <strong>MC68B50</strong> (<code>U2</code>) for the console serial port.</dd>
+  <dt>Decoupling capacitor</dt><dd>A small cap across VCC–GND beside each chip (<code>C1–C5</code>) that supplies instant current and quiets supply noise.</dd>
+  <dt>Crystal oscillator</dt><dd>A quartz crystal (<code>Y1</code>, 7.3728 MHz) plus inverter(s) and caps that generate the steady <code>CLK</code> the CPU runs on.</dd>
+</dl>
+
+<h2>Z80 signals you'll meet</h2>
+<dl>
+  <dt><code>CLK</code></dt><dd>The clock that paces every CPU action.</dd>
+  <dt><code>RESET</code></dt><dd>Forces the CPU back to a known start state (begins executing at address 0x0000).</dd>
+  <dt><code>M1</code></dt><dd>Marks an opcode-fetch machine cycle (the first byte of an instruction).</dd>
+  <dt><code><span class="ovl">MREQ</span></code> / <code><span class="ovl">IORQ</span></code></dt><dd>The CPU is addressing <em>memory</em> (MREQ) vs an <em>I/O device</em> (IORQ). The Z80 has two separate address spaces.</dd>
+  <dt><code><span class="ovl">RD</span></code> / <code><span class="ovl">WR</span></code></dt><dd>Direction of the current cycle: read from, or write to, the addressed location.</dd>
+  <dt><code><span class="ovl">CE</span></code>/<code><span class="ovl">CS</span></code>, <code><span class="ovl">OE</span></code>, <code><span class="ovl">WE</span></code></dt><dd>Chip Enable/Select, Output Enable, Write Enable — how a memory chip is told "you're the one being talked to," and whether to drive or accept data.</dd>
+  <dt>Bank selection</dt><dd>Using high address lines (here ROM <code>A13/A14/A15</code>, set by jumpers <code>JP2/JP3/JP4</code> via the select nets <code>S1/S2/S3</code>) to choose which 8K slice of a larger ROM is visible. See the factory ROM 8-digit label scheme.</dd>
+</dl>
+
+<p class="nav">RC2014 Micro teaching workspace · see <a href="rc2014-micro-component-inventory.html">Component Inventory</a> · <a href="../lessons/0001-reading-the-rc2014-micro-schematic.html">Lesson 01</a> · <a href="../MISSION.md">Mission</a></p>
+</body>
+</html>
