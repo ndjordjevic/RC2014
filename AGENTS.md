@@ -17,6 +17,12 @@ This wiki is the authoritative local source for this domain. Start with the wiki
 
 > **Wiki management:** Use `/pin-llm-wiki` (`init`, `run`, `lint`, `queue`, `remove`) to ingest sources and manage this wiki. The skill runs in Claude Code, Cursor, and GitHub Copilot — full workflow instructions live in the skill files.
 
+> **Researching the RC2014-Z80 Google Group:** `https://groups.google.com/g/rc2014-z80` is a primary community
+> source but its UI is JS-heavy and not directly browsable. Use `WebSearch` with
+> `site:groups.google.com/g/rc2014-z80 <topic>` to find relevant threads, then `WebFetch` the specific thread
+> URL to pull the actual posts (verified working, including author attribution). Queue any thread containing a
+> load-bearing fact with `/pin-llm-wiki queue <url>` so it gets captured as a cited wiki source.
+
 ---
 
 ## Git — never auto-commit

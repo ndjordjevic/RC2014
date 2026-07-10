@@ -56,6 +56,15 @@ Append these HTML comments to any URL line in `inbox.md`:
 | `<!-- no-companion -->` | Web: suppress companion GitHub fetch even if a repo is found |
 | `<!-- note: text -->` | Freeform note for human review (queue only; ignored by ingest) |
 
+## Researching the RC2014-Z80 Google Group
+
+The [RC2014-Z80 Google Group](https://groups.google.com/g/rc2014-z80) is a key community source, but its UI is
+JS-heavy and won't render content via a plain fetch. The reliable path:
+
+1. `WebSearch` for `site:groups.google.com/g/rc2014-z80 <topic>` — surfaces relevant thread URLs + a quick summary.
+2. `WebFetch` on the specific thread URL — pulls the actual posts, often with author attribution.
+3. `/pin-llm-wiki queue <thread-url>` — captures any thread with a load-bearing fact as a cited wiki source.
+
 ## Querying the wiki
 
 Open `wiki/index.md` for the full source table, then follow `[[wikilinks]]` into source pages. Use `wiki/overview.md` for a cross-source synthesis.
