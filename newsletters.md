@@ -6,7 +6,7 @@ Sources:
 - Mailchimp archive (issues 49–68, Nov 2023 – Jun 2026): https://us13.campaign-archive.com/home/?u=9794c5b78f76285b2bc1ff7bd&id=21fa309286
 - Official archive (issues 1–50 + Easter Special, 2016–2024): https://rc2014.co.uk/history/rc2014-newsletter-archive/
 
-Issue 1 (mid-2016) is the earliest known issue. Issue 40's archive URL currently serves duplicate Issue 39 content — no distinct Issue 40 text could be found.
+Issue 1 (mid-2016) is the earliest known issue.
 
 ---
 
@@ -153,7 +153,7 @@ Launches a Ukrainian-themed RC2014 kit line with 50% of proceeds going to humani
 ### Issue 40
 [Read issue](https://rc2014.co.uk/newsletter/RC2014%20Newsletter%20-%20Issue%2040.html)
 
-(Archive URL currently serves duplicate Issue 39 content — no distinct Issue 40 text available.)
+Covers a Christmas shipping cutoff (orders by Dec 23), a switch to greener paper/card packaging, and the launch of Shiela Dixon's 8x8 LED Matrix Display Module. Announces a new £40 minimum order value for EU orders starting January (due to rising DHL costs), plus a New Zealand vintage computer meetup video, a completed sticker set, and Lumír Vaněk's DS1302/Bubble LED digital clock project.
 
 ### Issue 39
 [Read issue](https://rc2014.co.uk/newsletter/RC2014%20Newsletter%20-%20Issue%2039.html)
