@@ -3,12 +3,17 @@
 Brief summaries of RC2014's newsletter, newest first. This is a plain reference list, not part of the wiki.
 
 Sources:
-- Mailchimp archive (issues 49–68, Nov 2023 – Jun 2026): https://us13.campaign-archive.com/home/?u=9794c5b78f76285b2bc1ff7bd&id=21fa309286
-- Official archive (issues 1–50 + Easter Special, 2016–2024): https://rc2014.co.uk/history/rc2014-newsletter-archive/
+- Mailchimp archive (issues 49–69, Nov 2023 – Aug 2026): https://us13.campaign-archive.com/home/?u=9794c5b78f76285b2bc1ff7bd&id=21fa309286
+- Official archive (issues 1–60 + Easter Special, 2016–2026): https://rc2014.co.uk/history/rc2014-newsletter-archive/
 
 Issue 1 (mid-2016) is the earliest known issue.
 
 ---
+
+### Issue 69 — 2026-08-26
+[Read issue](https://mailchi.mp/a6c37d77519f/rc2014-newsletter-issue-6765457?e=bc8e1510ad)
+
+RC2014 Assembly 2.0 is a month out (Sept 26 at TNMOC, Bletchley Park), with Lightning Talk slots and JLCPCB name badges in the works. The RC2014 Mini Zed — a RomWBW-based single-board computer hinted at last issue — is now on sale, with stackable 1.8" IDE HDD and Compact Flash storage layers coming in September. RC2014 and z80kits have published an AI policy: no AI used in kit design, imagery, code, marketing or supply, and AI-generated posts to the Google Group should be labelled. Shiela Dixon's Orton 3C music/BEEPER routines are now folded into the shipping ROM (update available on Codeberg). The co.uk site now hosts an archive of the first 60 newsletters. Free Captain Zilog comics with z80kits orders over £50 (codes CAPTAIN1/2/3) or £200 (CAPTAIN123). Spencer will be at OSHCamp over the UK bank holiday weekend, delaying order shipping.
 
 ### Issue 68 — 2026-06-25
 [Read issue](https://mailchi.mp/ad8022dd8ebf/rc2014-newsletter-issue-6764396?e=bc8e1510ad)
